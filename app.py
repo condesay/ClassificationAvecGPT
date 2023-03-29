@@ -25,7 +25,7 @@ def classify_sentiment(prompt, engine,temperature, max_tokens, top_p, frequency_
 
 def main():
     # Set page title
-    st.title("ChatGPT Web App Par Sayon")
+    st.title("Analyse de Sentiment avec GPT3 Web App")
 
     # Set up sidebar options
     engine_options = {

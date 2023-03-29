@@ -1,18 +1,21 @@
 import openai
 import streamlit as st
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
+from streamlit_chat import message
 
 openai.api_key = "YOUR_API_KEY_HERE"
 
-def classify_text(text, model, categories):
-    # Tokenize input text
-    tokens = model.tokenizer(text, truncation=True, padding=True, return_tensors="pt")
-    # Generate output logits
-    output = model(**tokens).logits
-    # Get predicted category
-    category_index = output.argmax().item()
-    predicted_category = categories[category_index]
-    return predicted_category
+def classify_document(prompt, engine):
+    completion = openai.Completion.create(
+        engine=engine,
+        prompt=prompt,
+        max_tokens=1,
+        n=1,
+        stop=None,
+        temperature=0.0,
+    )
+
+    label = completion.choices[0].text
+    return label.strip()
 
 def main():
     # Set page title
@@ -22,7 +25,8 @@ def main():
     engine_options = {
         "Davinci": {
             "Text": "text-davinci-003",
-            "Code": "code-davinci-002"
+            "Code": "code-davinci-002",
+            "Classification": "model-name-for-classification"
         }
     }
 
@@ -36,9 +40,10 @@ def main():
         "frequency_penalty": 0.0,
         "presence_penalty": 0.0
     }
+
     # get user API key
     api_key = st.text_input("Entrez votre clé OpenAI API Key:", type="password")
-
+    
     if api_key:
         openai.api_key = api_key
 

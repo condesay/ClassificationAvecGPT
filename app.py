@@ -58,7 +58,7 @@ def main():
         if user_input:
             engine_id = engine_options[settings["engine"]][settings["mode"]]
             prompt = f"Sentiment Analysis: {user_input}\nSentiment:"
-            sentiment = classify_sentiment(prompt, engine_id)
+            sentiment = classify_sentiment(prompt, engine_id,  settings["temperature"], settings["max_tokens"], settings["top_p"], settings["frequency_penalty"], settings["presence_penalty"])
             st.write(f"Sentiment: {sentiment}")
             
         # Display chat settings sidebar

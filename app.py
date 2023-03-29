@@ -1,21 +1,25 @@
 import openai
 import streamlit as st
-from streamlit_chat import message
 
-openai.api_key = "YOUR_API_KEY_HERE"
+openai.api_key = "YOUR_OPENAI_API_KEY_HERE"
 
-def classify_document(prompt, engine):
-    completion = openai.Completion.create(
+def classify_sentiment(prompt, engine):
+    response = openai.Completion.create(
         engine=engine,
         prompt=prompt,
         max_tokens=1,
         n=1,
         stop=None,
-        temperature=0.0,
+        temperature=0.5
     )
 
-    label = completion.choices[0].text
-    return label.strip()
+    sentiment = response.choices[0].text.strip()
+    if sentiment == "Positive":
+        return "positive"
+    elif sentiment == "Negative":
+        return "negative"
+    else:
+        return "neutral"
 
 def main():
     # Set page title
@@ -24,16 +28,14 @@ def main():
     # Set up sidebar options
     engine_options = {
         "Davinci": {
-            "Text": "text-davinci-003",
-            "Code": "code-davinci-002",
-            "Classification": "text-davinci-003"
+            "Sentiment Analysis": "text-davinci-002"
         }
     }
 
     # Set up initial settings
     settings = {
         "engine": "Davinci",
-        "mode": "Text",
+        "mode": "Sentiment Analysis",
         "temperature": 0.7,
         "max_tokens": 190,
         "top_p": 1.0,
@@ -52,9 +54,10 @@ def main():
 
         # classify input text
         if user_input:
-            label = classify_document(user_input, engine_options[settings["engine"]]["Classification"])
-            st.write("La classification du texte est:", label)
+            engine_id = engine_options[settings["engine"]][settings["mode"]]
+            prompt = f"Sentiment Analysis: {user_input}\nSentiment:"
+            sentiment = classify_sentiment(prompt, engine_id)
+            st.write(f"Sentiment: {sentiment}")
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

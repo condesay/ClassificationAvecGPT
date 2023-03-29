@@ -26,7 +26,7 @@ def main():
         "Davinci": {
             "Text": "text-davinci-003",
             "Code": "code-davinci-002",
-            "Classification": "model-name-for-classification"
+            "Classification": "text-davinci-003"
         }
     }
 

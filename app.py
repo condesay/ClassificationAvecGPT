@@ -26,6 +26,7 @@ def main():
         "Davinci": {
             "Text": "text-davinci-003",
             "Code": "code-davinci-002",
+            "Classification": "model-name-for-classification"
         }
     }
 
@@ -45,6 +46,15 @@ def main():
     
     if api_key:
         openai.api_key = api_key
+
+        # get user input
+        user_input = st.text_input("Entrez votre texte à classifier:")
+
+        # classify input text
+        if user_input:
+            label = classify_document(user_input, engine_options[settings["engine"]]["Classification"])
+            st.write("La classification du texte est:", label)
+
 
 if __name__ == '__main__':
     main()
